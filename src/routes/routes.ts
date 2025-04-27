@@ -15,9 +15,8 @@ routes.get('/user/profile', authMiddleware, new LoginController().getProfile);
 routes.put('/user/update/:id', authMiddleware, new UserController().update);
 routes.delete('/user/delete', authMiddleware, new UserController().delete);
 
-routes.get('/github/:username/:repo/contents/:path*', new RepoPathController().get);
-routes.get('/github/:username/:repo/contents', new RepoContentController().get);
 routes.get('/github/:username/repos', new ReposController().get)
+routes.get('/github/:username/:repo/contents', new RepoPathController().get);
 
 routes.post("/chat", new ChatController().handleChat)
 

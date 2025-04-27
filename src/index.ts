@@ -17,8 +17,8 @@ AppDataSource.initialize().then(() => {
   app.use(routes)
 
   app.use(errorMiddleware);
-  return app.listen(3333, () => {
-    console.log(`Servidor rodando na porta ${3333}`);
+  return app.listen(1234, () => {
+    console.log(`Servidor rodando na porta ${1234}`);
   });
 })
 
