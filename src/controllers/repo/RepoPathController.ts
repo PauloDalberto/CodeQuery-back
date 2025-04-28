@@ -1,19 +1,25 @@
-import { Request, Response } from 'express';
-import { repoPathService } from '../../services/repo/RepoPathService';
-import { BadRequestError } from '../../helpers/api-error';
+import { Request, Response } from "express";
+import { repoPathService } from "../../services/repo/RepoPathService";
+
+import { setCachedFilesContent } from "../../cache/repoChace";
 
 export class RepoPathController {
   async get(req: Request, res: Response) {
     const { username, repo } = req.params;
 
-    try {
+    if (!username || !repo) {
+      return res.status(400).json({ error: "Username e repo obrigatórios." });
+    }
 
-      const response = await repoPathService({ username, repo });
-      res.json({ message: 'Arquivos lidos com sucesso!' });
-      return response;
-    } catch (err) {
-      console.log(err)
-      throw new BadRequestError('Erro ao buscar conteúdo dos arquivos!');
+    try {
+      const filesContent = await repoPathService({ username, repo });
+
+      setCachedFilesContent(filesContent); 
+
+      res.json({ message: "Repositório carregado com sucesso." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: "Erro ao carregar o repositório." });
     }
   }
 }

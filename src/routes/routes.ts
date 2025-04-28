@@ -16,8 +16,9 @@ routes.put('/user/update/:id', authMiddleware, new UserController().update);
 routes.delete('/user/delete', authMiddleware, new UserController().delete);
 
 routes.get('/github/:username/repos', new ReposController().get)
+// @ts-ignore
 routes.get('/github/:username/:repo/contents', new RepoPathController().get);
-
+// @ts-ignore
 routes.post("/chat", new ChatController().handleChat)
 
 export default routes;
