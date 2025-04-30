@@ -2,19 +2,12 @@ import axios from 'axios';
 import { BadRequestError } from '../../helpers/api-error';
 import 'dotenv';
 
-interface FetchRepoContentsParams {
-  username: string;
-  repo: string;
-  path?: string;
-  filesContent?: { [key: string]: string }; 
-}
-
 export async function repoPathService({
   username,
   repo,
   path = 'src',
   filesContent = {}
-}: FetchRepoContentsParams): Promise<{ [key: string]: string }> {
+}: FetchRepoContentsParamsDTO): Promise<{ [key: string]: string }> {
   const response = await axios.get(`https://api.github.com/repos/${username}/${repo}/contents/${path}`, {
     headers: {
       Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,

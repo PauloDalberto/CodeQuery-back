@@ -1,17 +1,16 @@
 import axios from 'axios';
 import { Request, Response } from 'express'
 import { BadRequestError } from '../../helpers/api-error';
+import { RepoService } from '../../services/repo/RepoService';
 
 export class ReposController {
   async get(req: Request, res: Response){
     const { username } = req.params; 
 
-    const response = await axios.get(`https://api.github.com/users/${username}/repos`);
+    const repoService = new RepoService();
 
-    if(!response){
-      throw new BadRequestError('E-mail ou senha inválidos!');
-    }
+    const repo = await repoService.getProfile({ username })
 
-    res.json(response.data)
+    res.json(repo);
   }
 }

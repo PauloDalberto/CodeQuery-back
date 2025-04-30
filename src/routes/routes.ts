@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { ReposController } from "../controllers/repo/ReposController";
-import { RepoContentController } from "../controllers/repo/RepoContentController";
 import { RepoPathController } from "../controllers/repo/RepoPathController";
 import { UserController } from "../controllers/user/UserController";
 import { LoginController } from "../controllers/user/LoginController";
@@ -16,9 +15,7 @@ routes.put('/user/update/:id', authMiddleware, new UserController().update);
 routes.delete('/user/delete', authMiddleware, new UserController().delete);
 
 routes.get('/github/:username/repos', new ReposController().get)
-// @ts-ignore
 routes.get('/github/:username/:repo/contents', new RepoPathController().get);
-// @ts-ignore
 routes.post("/chat", new ChatController().handleChat)
 
 export default routes;
