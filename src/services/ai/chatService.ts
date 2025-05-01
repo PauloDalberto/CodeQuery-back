@@ -10,25 +10,33 @@ export class ChatService {
     for (const [filePath, content] of Object.entries(filesContent)) {
       filesMessage += `Arquivo: ${filePath}\n${content}\n\n`;
     }
+
     const response = await ai.models.generateContent({
       model: "gemini-1.5-pro",
-      contents: `
-        Você é uma inteligência artificial especialista e avançada em programação, como se fosse um desenvolvedor sênior.
-        Seu trabalho é ler todo o repositório abaixo e se preparar para conversar com o usuário sobre ele.
-  
-        - Leia todos os arquivos com atenção.
-        - Esteja pronto para tirar dúvidas, dar ideias, indicar onde estão os arquivos, e explicar funções detalhadamente quando o usuário pedir.
-        - Não crie suposições; baseie suas respostas apenas no que estiver no código lido.
-  
-        Aqui está o repositório: ${filesMessage}
-  
-        - A primeira pergunta do usuário é: ${message}
-      `,
+      contents: [
+        {
+          role: "user",
+          parts: [
+            {
+              text: `
+                Você é uma IA especialista em programação (nível sênior).; 
+                Seu trabalho é analisar o repositório abaixo e conversar com o usuário.
+
+                - Leia todos os arquivos com atenção.
+                - Esteja pronto para tirar dúvidas, dar ideias, indicar onde estão os arquivos, e explicar funções detalhadamente quando o usuário pedir.
+                - Responda quando necessário em **Markdown** com formatações como \`código\`, listas, títulos etc.
+                - Não invente. Responda **somente com base no código** fornecido.
+                - Arquivos abaixo:\n\n${filesMessage}
+
+                Agora responda a esta pergunta do usuário:
+                "${message}"
+              `
+            }
+          ]
+        }
+      ]
     });
-    
+
     return response.text;
   }
 }
-
-
-

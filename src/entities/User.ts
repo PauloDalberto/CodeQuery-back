@@ -1,4 +1,5 @@
 import { Column, DeleteDateColumn, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Conversation } from "./Conversation";
 
 @Entity('users')
 export class User{
@@ -16,4 +17,7 @@ export class User{
 
   @DeleteDateColumn()
   deleted_at: Date;
+
+  @OneToMany(() => Conversation, (conv) => conv.user)
+  conversations: Conversation[];
 }
