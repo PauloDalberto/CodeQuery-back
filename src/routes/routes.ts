@@ -17,9 +17,9 @@ routes.delete('/user/delete', authMiddleware, new UserController().delete);
 
 routes.get('/github/:username/repos', new ReposController().get)
 routes.get('/github/:username/:repo/contents', new RepoPathController().get);
-routes.post("/chat/:conversationId", new ChatController().handleChat);
+routes.post("/chat/:conversationId", authMiddleware, new ChatController().handleChat);
 
-routes.post('/conversation', new ConversationController().create)
-routes.get('/conversation/:userId', new ConversationController().listByUser)
+routes.post('/conversation', authMiddleware, new ConversationController().create)
+routes.get('/conversationsUser', authMiddleware, new ConversationController().listByUser)
 
 export default routes;

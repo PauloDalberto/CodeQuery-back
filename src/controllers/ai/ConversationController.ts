@@ -3,11 +3,11 @@ import { conversationRepository } from "../../repositories/conversationRepositor
 
 export class ConversationController {
   async create(req: Request, res: Response) {
-    const { title, userId } = req.body;
+    const { title } = req.body;
 
     const conversation = conversationRepository.create({
       title,
-      user: { id: userId },
+      user: { id: req.user.id },
     });
 
     await conversationRepository.save(conversation);
@@ -16,7 +16,7 @@ export class ConversationController {
   }
 
   async listByUser(req: Request, res: Response) {
-    const { userId } = req.params;
+    const userId = req.user.id;
 
     const conversations = await conversationRepository.find({
       where: { user: { id: Number(userId) } },

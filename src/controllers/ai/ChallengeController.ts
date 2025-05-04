@@ -17,7 +17,7 @@ export class ChatController {
       throw new NotFoundError("Repositório não carregado. Busque o repositório primeiro.");
     }
 
-    const reply = await ChatService.sendMessage(message, filesContent);
+    const reply = await ChatService.sendMessage(message);
     
     res.json({ reply });
   }

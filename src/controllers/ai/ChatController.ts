@@ -6,8 +6,13 @@ import { ChatService } from "../../services/ai/chatService";
 
 export class ChatController {
   async handleChat(req: Request, res: Response) {
-    const { message, userId } = req.body;
+    const { message } = req.body;
     const { conversationId } = req.params;
+    const userId = req.user.id
+
+    if(!userId){
+      throw new BadRequestError("Não foi encontrado esse usuario")
+    }
 
     if (!message) {
       throw new BadRequestError("Mensagem é obrigatória");
