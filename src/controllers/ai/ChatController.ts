@@ -6,7 +6,8 @@ import { ChatService } from "../../services/ai/chatService";
 
 export class ChatController {
   async handleChat(req: Request, res: Response) {
-    const { message } = req.body;
+    const { message, userId } = req.body;
+    const { conversationId } = req.params;
 
     if (!message) {
       throw new BadRequestError("Mensagem é obrigatória");
@@ -19,7 +20,13 @@ export class ChatController {
     }
 
     try {
-      const reply = await ChatService.sendMessage(message, filesContent);
+      const reply = await ChatService.sendMessage({
+        message,
+        conversationId: Number(conversationId),
+        filesContent,
+        userId,
+      });
+
       res.json({ reply });
     } catch (error) {
       console.error("Erro no ChatService:", error);
