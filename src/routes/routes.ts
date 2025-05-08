@@ -21,5 +21,7 @@ routes.post("/chat/:conversationId", authMiddleware, new ChatController().handle
 
 routes.post('/conversation', authMiddleware, new ConversationController().create)
 routes.get('/conversationsUser', authMiddleware, new ConversationController().listByUser)
+routes.get("/conversations/:id/messages", new ConversationController().messages);
+
 
 export default routes;

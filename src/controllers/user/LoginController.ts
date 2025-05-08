@@ -7,9 +7,15 @@ export class LoginController {
 
     const loginService = new LoginService();
 
-    const login = await loginService.login({ email, password });
+    const { token, user } = await loginService.login({ email, password });
 
-    res.json(login);
+    res.cookie('token', token, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 1000 * 60 * 60
+    })
+
+    res.json({ user });
   }
 
   async getProfile(req: Request, res: Response){    

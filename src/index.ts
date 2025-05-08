@@ -4,10 +4,12 @@ import { AppDataSource } from "./data-source";
 import routes from "./routes/routes";
 import { errorMiddleware } from './middlewares/error';
 import cors from 'cors';
+import cookieParser from "cookie-parser";
 
 AppDataSource.initialize().then(() => {
   const app = express();
   app.use(express.json())
+  app.use(cookieParser());
 
   app.use(cors({
     origin: 'http://localhost:3000',
