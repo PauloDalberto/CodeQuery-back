@@ -1,27 +1,22 @@
 import "dotenv/config";
 import { GoogleGenAI } from "@google/genai";
-import { conversationRepository } from "../../repositories/conversationRepository";
 import { messageRepository } from "../../repositories/messageRepository";
 import { BadRequestError } from "../../helpers/api-error";
+import { Conversation } from "../../entities/Conversation";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
 export class ChatService {
   static async sendMessage({
     message,
-    conversationId,
-    filesContent
+    conversation,
+    filesContent,
   }: {
     message: string;
-    conversationId: number;
+    conversation: Conversation; 
     filesContent?: { [key: string]: string };
     userId: number;
   }) {
-    const conversation = await conversationRepository.findOne({
-      where: { id: conversationId },
-      relations: ["messages"]
-    });
-
     if (!conversation) {
       throw new BadRequestError("Conversa não encontrada!");
     }
@@ -29,7 +24,7 @@ export class ChatService {
     const userMessage = messageRepository.create({
       role: "user",
       content: message,
-      conversation
+      conversation,
     });
     await messageRepository.save(userMessage);
 
@@ -38,7 +33,7 @@ export class ChatService {
       parts: [{ text: msg.content }],
     }));
 
-    let filesMessage = '';
+    let filesMessage = "";
     if (filesContent) {
       for (const [filePath, content] of Object.entries(filesContent)) {
         filesMessage += `Arquivo: ${filePath}\n${content}\n\n`;
@@ -58,19 +53,19 @@ export class ChatService {
             - Responda quando necessário em **Markdown** com formatações como \`código\`, listas, títulos etc.
             - Não invente. Responda **somente com base no código** fornecido.
 
-            Arquivos abaixo:\n\n${filesMessage}`
-        }
-      ]
+            Arquivos abaixo:\n\n${filesMessage}`,
+        },
+      ],
     });
 
     history.push({
       role: "user",
-      parts: [{ text: message }]
+      parts: [{ text: message }],
     });
 
     const result = await ai.models.generateContent({
-      model: "gemini-1.5-pro",
-      contents: history
+      model: "gemini-1.5-flash",
+      contents: history,
     });
 
     const answerText = result.text;
@@ -81,6 +76,8 @@ export class ChatService {
       conversation,
     });
     await messageRepository.save(modelMessage);
+
+    console.log("Mensagens da conversa:", conversation.messages);
 
     return answerText;
   }

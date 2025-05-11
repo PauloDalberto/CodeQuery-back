@@ -1,21 +1,31 @@
 import { Request, Response } from "express";
-
 import { getCachedFilesContent } from "../../cache/repoChace";
 import { BadRequestError, NotFoundError } from "../../helpers/api-error";
 import { ChatService } from "../../services/ai/chatService";
+import { conversationRepository } from "../../repositories/conversationRepository";
 
 export class ChatController {
   async handleChat(req: Request, res: Response) {
     const { message } = req.body;
-    const { conversationId } = req.params;
-    const userId = req.user.id
+    const { uuid } = req.params; 
+    const userId = req.user.id;
 
-    if(!userId){
-      throw new BadRequestError("Não foi encontrado esse usuario")
+    if (!userId) {
+      throw new BadRequestError("Não foi encontrado esse usuário.");
     }
 
     if (!message) {
-      throw new BadRequestError("Mensagem é obrigatória");
+      throw new BadRequestError("Mensagem é obrigatória.");
+    }
+
+    // ✅ Busca a conversa pelo UUID em vez do ID
+    const conversation = await conversationRepository.findOne({
+      where: { uuid },
+      relations: ["messages"],
+    });
+
+    if (!conversation) {
+      throw new NotFoundError("Conversa não encontrada.");
     }
 
     const filesContent = getCachedFilesContent();
@@ -27,7 +37,7 @@ export class ChatController {
     try {
       const reply = await ChatService.sendMessage({
         message,
-        conversationId: Number(conversationId),
+        conversation,
         filesContent,
         userId,
       });

@@ -17,11 +17,11 @@ routes.delete('/user/delete', authMiddleware, new UserController().delete);
 
 routes.get('/github/:username/repos', new ReposController().get)
 routes.get('/github/:username/:repo/contents', new RepoPathController().get);
-routes.post("/chat/:conversationId", authMiddleware, new ChatController().handleChat);
+routes.post("/chat/:uuid", authMiddleware, new ChatController().handleChat);
 
 routes.post('/conversation', authMiddleware, new ConversationController().create)
 routes.get('/conversationsUser', authMiddleware, new ConversationController().listByUser)
-routes.get("/conversations/:id/messages", new ConversationController().messages);
+routes.get("/conversations/:uuid/messages", new ConversationController().messages);
+routes.put('/conversation/:uuid', authMiddleware, new ConversationController().updateConversation);
 
-
-export default routes;
+export default routes;  
