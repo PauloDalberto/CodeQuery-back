@@ -18,7 +18,6 @@ export class ChatController {
       throw new BadRequestError("Mensagem é obrigatória.");
     }
 
-    // ✅ Busca a conversa pelo UUID em vez do ID
     const conversation = await conversationRepository.findOne({
       where: { uuid },
       relations: ["messages"],
