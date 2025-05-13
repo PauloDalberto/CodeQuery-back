@@ -1,6 +1,7 @@
 import { conversationRepository } from "../../repositories/conversationRepository";
-import { BadRequestError } from "../../helpers/api-error";
+import { NotFoundError } from "../../helpers/api-error";
 import { CreateConversationDTO, UpdateConversationDTO } from "../../dtos/ConversationDTO";
+import { messageRepository } from "../../repositories/messageRepository";
 
 export class ConversationService {
   async create({ title, userId }: CreateConversationDTO) {
@@ -31,7 +32,7 @@ export class ConversationService {
     });
 
     if (!conversation) {
-      throw new BadRequestError("Conversa não encontrada.");
+      throw new NotFoundError("Conversa não encontrada.");
     }
 
     return conversation;
@@ -43,7 +44,7 @@ export class ConversationService {
     });
 
     if (!conversation) {
-      throw new BadRequestError("Erro, conversa não existe");
+      throw new NotFoundError("Erro, conversa não existe");
     }
 
     conversation.repository = repository;
@@ -52,5 +53,22 @@ export class ConversationService {
     await conversationRepository.save(conversation);
 
     return conversation;
+  }
+
+  async deleteConversation(uuid: string){
+    const conversation = await conversationRepository.findOne({
+      where: { uuid },
+      relations: ["messages"],
+    });
+
+    if(!conversation){
+      throw new NotFoundError("Conversa não encontrada");
+    }
+
+    if (conversation.messages.length > 0) {
+      await messageRepository.remove(conversation.messages);
+    }
+
+    await conversationRepository.delete({ uuid })
   }
 }

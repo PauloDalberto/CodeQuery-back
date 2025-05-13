@@ -25,5 +25,6 @@ routes.post('/conversation', authMiddleware, new ConversationController().create
 routes.get('/conversationsUser', authMiddleware, new ConversationController().listByUser)
 routes.get("/conversations/:uuid/messages", new ConversationController().messages);
 routes.put('/conversation/:uuid', authMiddleware, new ConversationController().updateConversation);
+routes.delete('/conversation/delete/:uuid', authMiddleware, new ConversationController().deleteConversation);
 
 export default routes;  

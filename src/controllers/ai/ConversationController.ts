@@ -48,4 +48,16 @@ export class ConversationController {
 
     res.status(200).json(conversation);
   }
+
+  async deleteConversation(req: Request, res: Response) {
+    const { uuid } = req.params;
+
+    if (!uuid) {
+      throw new BadRequestError("UUID não encontrado");
+    }
+
+    await conversationService.deleteConversation(uuid);
+
+    res.json({ message: "Conversa deletada com sucesso!" });
+  }
 }
