@@ -1,14 +1,30 @@
 import { Request, Response } from "express";
 import { getCachedFilesContent } from "../../cache/repoChace";
 import { BadRequestError, NotFoundError } from "../../helpers/api-error";
-import { ChatService } from "../../services/ai/chatService";
+import { ChallengeService } from "../../services/ai/ChallengeService";
+import { conversationRepository } from "../../repositories/conversationRepository";
 
-export class ChatController {
+export class ChallengeController {
   async handleChat(req: Request, res: Response) {
     const { message } = req.body;
+    const { uuid } = req.params; 
+    const userId = req.user.id;
+
+    if (!userId) {
+      throw new BadRequestError("Não foi encontrado esse usuário.");
+    }
 
     if (!message) {
-      throw new BadRequestError("Mensagem é obrigatória");
+      throw new BadRequestError("Mensagem é obrigatória.");
+    }
+
+    const conversation = await conversationRepository.findOne({
+      where: { uuid },
+      relations: ["messages"],
+    });
+
+    if (!conversation) {
+      throw new NotFoundError("Conversa não encontrada.");
     }
 
     const filesContent = getCachedFilesContent();
@@ -17,8 +33,18 @@ export class ChatController {
       throw new NotFoundError("Repositório não carregado. Busque o repositório primeiro.");
     }
 
-    const reply = await ChatService.sendMessage(message);
-    
-    res.json({ reply });
+    try {
+      const reply = await ChallengeService.sendMessage({
+        message,
+        conversation,
+        filesContent,
+        userId,
+      });
+
+      res.json({ reply });
+    } catch (error) {
+      console.error("Erro no ChatService:", error);
+      res.status(500).json({ error: "Erro ao processar a mensagem" });
+    }
   }
 }

@@ -6,6 +6,7 @@ import { LoginController } from "../controllers/user/LoginController";
 import { authMiddleware } from "../middlewares/auth";
 import { ChatController } from "../controllers/ai/ChatController";
 import { ConversationController } from "../controllers/ai/ConversationController";
+import { ChallengeController } from "../controllers/ai/ChallengeController";
 
 const routes = Router();
 
@@ -18,6 +19,7 @@ routes.delete('/user/delete', authMiddleware, new UserController().delete);
 routes.get('/github/:username/repos', new ReposController().get)
 routes.get('/github/:username/:repo/contents', new RepoPathController().get);
 routes.post("/chat/:uuid", authMiddleware, new ChatController().handleChat);
+routes.post("/challenge/:uuid", authMiddleware, new ChallengeController().handleChat);
 
 routes.post('/conversation', authMiddleware, new ConversationController().create)
 routes.get('/conversationsUser', authMiddleware, new ConversationController().listByUser)
