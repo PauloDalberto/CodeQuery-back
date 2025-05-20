@@ -15,6 +15,7 @@ routes.post('/user/login', new LoginController().login);
 routes.get('/user/profile', authMiddleware, new LoginController().getProfile);
 routes.put('/user/update/:id', authMiddleware, new UserController().update);
 routes.delete('/user/delete', authMiddleware, new UserController().delete);
+routes.post('/user/logout', new LoginController().logout);
 
 routes.get('/github/:username/repos', new ReposController().get)
 routes.get('/github/:username/:repo/contents', new RepoPathController().get);

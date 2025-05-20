@@ -21,4 +21,13 @@ export class LoginController {
   async getProfile(req: Request, res: Response){    
     res.json(req.user);
   }
+  
+  async logout(req: Request, res: Response) {
+    res.clearCookie("token", {
+      httpOnly: true,
+      sameSite: 'strict',
+      path: '/',
+    });
+    res.status(200).json({ message: "Logout realizado com sucesso" });
+  }
 }
