@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
-import { getCachedFilesContent } from "../../cache/repoChace";
+import { getCachedFilesContent, setCachedFilesContent } from "../../cache/repoChace";
 import { BadRequestError, NotFoundError } from "../../helpers/api-error";
 import { ChatService } from "../../services/ai/chatService";
 import { conversationRepository } from "../../repositories/conversationRepository";
+import { repoitoryDataRepository } from "../../repositories/repositoryDataRespository";
 
 export class ChatController {
   async handleChat(req: Request, res: Response) {
@@ -30,7 +31,14 @@ export class ChatController {
     const filesContent = getCachedFilesContent();
 
     if (!filesContent || Object.keys(filesContent).length === 0) {
-      throw new NotFoundError("Repositório não carregado. Busque o repositório primeiro.");
+      const savedRepo = await repoitoryDataRepository.findOne({ where: { conversationUuid: uuid } });
+
+      if (!savedRepo) {
+        throw new NotFoundError("Repositório não carregado e não encontrado no banco.");
+      }
+
+      const parsedContent = JSON.parse(savedRepo.filesContent);
+      setCachedFilesContent(parsedContent); // atualiza o cache para as próximas chamadas
     }
 
     try {
