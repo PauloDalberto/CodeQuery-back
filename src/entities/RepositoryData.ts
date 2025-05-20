@@ -14,12 +14,12 @@ export class RepositoryData {
   id: number;
 
   @Column({ type: "text" }) 
-  filesContent: string; 
+  filesContent: string;
 
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToOne(() => Conversation)
+  @OneToOne(() => Conversation, { onDelete: "CASCADE" }) 
   @JoinColumn({ name: "conversationUuid", referencedColumnName: "uuid" })
   conversation: Conversation;
 
