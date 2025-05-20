@@ -79,8 +79,6 @@ export class ChallengeService {
     });
     await messageRepository.save(modelMessage);
 
-    console.log("Mensagens da conversa:", conversation.messages);
-
     return answerText;
   }
 }
