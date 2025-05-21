@@ -35,3 +35,40 @@ Este repositório contém a API REST do sistema de conversas com IA, permitindo 
 ```bash
 git clone https://github.com/seu-usuario/seu-backend.git
 cd seu-backend
+```
+
+### 2. Instale as dependências
+
+```bash
+npm install
+# ou
+yarn install
+```
+
+### 3. Configure o ambiente
+
+```bash
+# Variáveis do banco de dados
+DB_NAME=nome_do_banco
+DB_USER=usuario_do_banco
+DB_PASS=senha_do_banco
+DB_HOST=localhost
+DB_PORT=porta_do_banco
+
+# Autenticação
+JWT_PASS=sua_chave_secreta
+
+# APIs externas
+GEMINI_API_KEY=sua_chave_da_gemini
+GITHUB_TOKEN=seu_token_do_github
+```
+
+### 4. Rode o projeto
+
+```bash
+npm run dev
+# ou
+yarn dev
+```
+
+Veja a parte Front End da aplicação aqui: [https://github.com/PauloDalberto/CodeQuery-front.git](https://github.com/PauloDalberto/CodeQuery-front)
