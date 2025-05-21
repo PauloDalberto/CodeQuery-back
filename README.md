@@ -2,8 +2,6 @@
 
 Este repositório contém a API REST do sistema de conversas com IA, permitindo que usuários interajam com inteligência artificial sobre seus repositórios públicos do GitHub. A aplicação conta com autenticação via JWT, controle de conversas, integração com APIs externas (Gemini e GitHub) e uso de banco de dados relacional com PostgreSQL via TypeORM.
 
----
-
 ##  Funcionalidades
 
 -  **Autenticação segura com JWT**
@@ -14,8 +12,6 @@ Este repositório contém a API REST do sistema de conversas com IA, permitindo 
 -  **Integração com API Gemini (IA)**
 -  **Integração com GitHub para leitura de repositórios públicos**
 
----
-
 ##  Tecnologias Utilizadas
 
 - **Node.js** – Ambiente de execução JavaScript no backend
@@ -25,8 +21,6 @@ Este repositório contém a API REST do sistema de conversas com IA, permitindo 
 - **JWT (JSON Web Token)** – Sistema de autenticação baseado em tokens
 - **Gemini API** – Plataforma de IA para geração de conteúdo
 - **GitHub API** – Integração com repositórios públicos do usuário
-
----
 
 ## ⚙️ Como rodar o projeto
 
