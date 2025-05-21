@@ -1,4 +1,4 @@
-# Backend - Sistema de Conversas com IA e Integração com Repositórios do GitHub
+# 💬 Code Query - Back End
 
 Este repositório contém a API REST do sistema de conversas com IA, permitindo que usuários interajam com inteligência artificial sobre seus repositórios públicos do GitHub. A aplicação conta com autenticação via JWT, controle de conversas, integração com APIs externas (Gemini e GitHub) e uso de banco de dados relacional com PostgreSQL via TypeORM.
 
